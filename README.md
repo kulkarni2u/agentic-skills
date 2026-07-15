@@ -4,7 +4,7 @@ A collection of Claude Code skills for turning raw product ideas into build-read
 
 ## Product Blueprint suite
 
-One master skill orchestrates five sub-skills. Every sub-skill is also independently
+One master skill orchestrates six sub-skills. Every sub-skill is also independently
 user-invocable — run just the piece you need.
 
 ```mermaid
@@ -14,6 +14,7 @@ graph LR
     C --> D[/tech-stack-advisor/]
     D --> E[/prd-writer/]
     E --> F[/tech-design/]
+    F -. optional .-> G[/scaffold/]
 ```
 
 | Skill | What it does | Output |
@@ -24,6 +25,7 @@ graph LR
 | `/tech-stack-advisor` | Recommends a tech stack via interactive questions (team skills, ops appetite, budget), layer by layer with trade-offs | `docs/blueprint/03-tech-stack.md` |
 | `/prd-writer` | Writes a testable, prioritized Product Requirements Document | `docs/blueprint/PRD.md` |
 | `/tech-design` | Writes a Technical Design Document with Mermaid diagrams (architecture, sequences, ER, deployment) and FR/NFR traceability | `docs/blueprint/TECHNICAL-DESIGN.md` |
+| `/scaffold` | Generates a runnable project skeleton from the technical design — structure, tooling, model & API stubs, tests, CI — and verifies it installs, lints, and tests green | project directory |
 
 ### Usage
 
@@ -32,6 +34,7 @@ graph LR
 /product-blueprint "a mobile app that tracks my houseplants' watering schedules"
 /requirements-clarify docs/spec.md      # just run the clarification loop
 /tech-stack-advisor                     # just get stack advice
+/scaffold docs/blueprint/TECHNICAL-DESIGN.md ./my-app   # just scaffold the project
 ```
 
 ### Installation

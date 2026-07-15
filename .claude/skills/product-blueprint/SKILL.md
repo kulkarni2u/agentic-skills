@@ -24,6 +24,7 @@ the artifacts produced by earlier phases.
 | 3. Tech stack | `tech-stack-advisor` | `docs/blueprint/03-tech-stack.md` |
 | 4. PRD | `prd-writer` | `docs/blueprint/PRD.md` |
 | 5. Technical design | `tech-design` | `docs/blueprint/TECHNICAL-DESIGN.md` |
+| 6. Scaffold (optional) | `scaffold` | runnable project skeleton |
 
 ## Orchestration rules
 
@@ -45,11 +46,15 @@ the artifacts produced by earlier phases.
 6. **Resume support.** If `docs/blueprint/` already contains artifacts from an earlier run,
    ask the user whether to resume from the first missing/stale phase or start over.
 
+7. **Phase 6 is opt-in.** After the technical design, ask the user (AskUserQuestion) whether
+   to scaffold the project now. Only invoke `scaffold` if they say yes — documents are the
+   core deliverable; code generation is a bonus step.
+
 ## Final deliverable
 
-When Phase 5 completes, present the user a short closing summary:
+When the pipeline completes, present the user a short closing summary:
 
 - One-paragraph product description in plain language.
-- Links (file paths) to all five artifacts.
+- Links (file paths) to all artifacts (and the scaffolded project directory if Phase 6 ran).
 - The 3 highest-risk open assumptions carried into the design.
-- Suggested next step (e.g., "want me to scaffold the project from the technical design?").
+- Suggested next step (scaffold if skipped, or start implementing the first P0 requirements).
