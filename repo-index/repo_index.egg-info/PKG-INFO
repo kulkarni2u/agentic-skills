@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: repo-index
+Version: 0.1.0
+Summary: IDE-like code indexer that creates searchable SQLite index of methods, constants, and variables
+Requires-Python: >=3.8
+Requires-Dist: tree-sitter>=0.20.0
+Requires-Dist: tree-sitter-python>=0.20.0
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
