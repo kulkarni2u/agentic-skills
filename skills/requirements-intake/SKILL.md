@@ -23,6 +23,11 @@ Determine the input type from the argument (or from context if invoked by `produ
 If a file path doesn't exist, list likely matches (Glob) and confirm with the user rather
 than guessing.
 
+**Existing codebase?** If the requirements describe adding to a repo that already has code
+(not a greenfield idea), invoke the `repo-index` skill to build/refresh `.repo-index/index.db`
+and search it for the areas the requirements touch, instead of grepping by hand. Cite what
+you find (or don't find) as context under Constraints or Gaps in Step 3.
+
 ## Step 2 — Extract and classify
 
 Read the full source before summarizing. Classify every substantive statement into:

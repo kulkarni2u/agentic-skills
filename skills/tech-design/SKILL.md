@@ -19,6 +19,10 @@ If a significant architectural fork exists that the inputs don't settle (e.g. mo
 services, sync vs event-driven, multi-tenant strategy), ask via **AskUserQuestion** before
 writing — architecture is expensive to redo.
 
+If designing onto an existing codebase, use `repo-index` to inventory current components,
+entry points, and data-layer modules before drawing the architecture diagram — the design
+should show what's actually there plus what's new, not a guess at the former.
+
 ## Diagram rules
 
 All diagrams are **Mermaid** in fenced ```mermaid blocks so they render on GitHub and in

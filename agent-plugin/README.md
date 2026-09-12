@@ -38,6 +38,7 @@ package bundled alongside it:
 ```bash
 cd <path-to-agentic-skills-repo>/skills/repo-index/scripts
 pip install -e .
+repo-index install-hooks /path/to/your-repo   # auto re-index on checkout/commit/merge/pull/push
 ```
 
 ## Gaps / known limitations

@@ -14,6 +14,10 @@ interactive question loop that ends only at **≥ 90% confidence**.
 Prefer `docs/blueprint/01-intake.md` if it exists; otherwise use the argument (file or
 free text). If neither exists, invoke the `requirements-intake` skill first.
 
+If this is a brownfield feature, use `repo-index` to check what's already implemented before
+asking a question the codebase already answers (e.g. an existing auth module settles part of
+"Security & compliance" below without a round-trip to the user).
+
 ## The confidence rubric
 
 Score each dimension 0–10, based on whether you could defend a concrete design decision

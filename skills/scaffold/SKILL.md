@@ -19,7 +19,9 @@ name on the spot — don't pick a stack silently.
 **Target directory**: second argument if given; otherwise ask via AskUserQuestion —
 offer (a) a new subdirectory named after the product, (b) the current repo root
 (only if it isn't already a project), or (c) a path they type. Never overwrite an
-existing non-empty directory without explicit confirmation.
+existing non-empty directory without explicit confirmation. If the target is an existing
+non-empty Python project, use `repo-index` to inventory what's already defined there before
+generating stubs, so you don't propose module/function names that collide with real code.
 
 ## What to generate
 
@@ -53,6 +55,10 @@ Fix failures; do not hand over a red skeleton. If sandbox/network limits block a
 say exactly which step and why instead of claiming success.
 
 ## Report
+
+If the generated (or target) project is Python, initialize `git` in it if it isn't already
+a repo, then invoke `repo-index` to build its index and install the auto-index git hooks
+(`install-hooks`) — so the codebase is searchable and stays that way from the first commit.
 
 Tell the user: the directory tree (top two levels), the commands to run it, what is
 stubbed vs working, and the first 3 FR IDs you'd implement next. Standalone: offer to

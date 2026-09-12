@@ -49,6 +49,10 @@ the artifacts produced by earlier phases.
 7. **Phase 6 is opt-in.** After the technical design, ask the user (AskUserQuestion) whether
    to scaffold the project now. Only invoke `scaffold` if they say yes — documents are the
    core deliverable; code generation is a bonus step.
+8. **Brownfield awareness.** If this run is adding to an existing codebase rather than
+   starting from scratch, mention that to whichever sub-skill is running — each of Phases
+   1, 3, 4, and 5 knows to consult `repo-index` for what's already implemented instead of
+   treating everything as new.
 
 ## Final deliverable
 

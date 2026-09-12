@@ -57,6 +57,11 @@ SQLite database, similar to IDE indexing. Requires the bundled `repo_index` Pyth
 (`pip install -e .` from `skills/repo-index/scripts/` — see `skills/repo-index/SKILL.md` for
 details).
 
+Run `repo-index install-hooks /path/to/your-repo` once and the index rebuilds itself in the
+background after every checkout, commit, merge/pull, rebase, and push — the other skills
+below use it to look up existing code instead of grepping by hand, and a stale index would
+silently give them wrong answers.
+
 ## Portable Agent Plugin (any compliant client)
 
 Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same eight skills to the

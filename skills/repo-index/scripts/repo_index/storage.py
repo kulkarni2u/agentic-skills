@@ -12,6 +12,7 @@ class RepoIndex:
         self.path = path
         self.ensure_dirs()
         self.conn = sqlite3.connect(path)
+        self.conn.execute("PRAGMA busy_timeout = 5000")
         self._create_tables()
 
     def ensure_dirs(self):
@@ -53,6 +54,17 @@ class RepoIndex:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 path TEXT UNIQUE NOT NULL
             );
+        """)
+        self.conn.commit()
+
+    def clear(self):
+        """Remove all indexed data. Call before a full re-index so re-running
+        `index` doesn't accumulate duplicate rows for unchanged files."""
+        self.conn.executescript("""
+            DELETE FROM methods;
+            DELETE FROM constants;
+            DELETE FROM variables;
+            DELETE FROM files;
         """)
         self.conn.commit()
 

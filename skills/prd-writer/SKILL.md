@@ -24,6 +24,9 @@ assumptions clearly marked. Do not silently invent substance.
 - Keep IDs stable: reuse FR-n/NFR-n numbering from the clarified requirements doc.
 - Mark anything not user-confirmed as *(assumption)*.
 - Target length: 2–6 pages. A PRD nobody reads is a PRD that doesn't exist.
+- For a brownfield PRD, check `repo-index` before writing a requirement as new work — a
+  requirement already satisfied by existing code is scope you can drop or mark *(exists)*,
+  not a fresh FR.
 
 ## Template
 

@@ -13,6 +13,11 @@ Arrive at a tech stack the user actually agrees with — through questions, not 
 Prefer `docs/blueprint/02-clarified-requirements.md`, then `01-intake.md`, then the argument.
 With no input at all, first ask what they're building (one question), then proceed.
 
+If the target is an existing repo, use `repo-index` to see what's already in use (framework
+entry points, ORM/config modules, existing constants naming a queue or cache) before treating
+any layer as an open choice — a layer already committed to in code is "constrained", not a
+question for Step 1 or Step 3.
+
 ## Step 1 — Context questions
 
 Requirements rarely capture the human factors that should drive stack choice. Ask via
