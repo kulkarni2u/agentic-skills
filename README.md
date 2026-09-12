@@ -54,7 +54,8 @@ graph LR
 
 `/agentic-skills:repo-index` indexes a repository's methods and constants into a searchable
 SQLite database, similar to IDE indexing. Requires the bundled `repo_index` Python package
-(`pip install -e .` from this plugin's root — see `skills/repo-index/SKILL.md` for details).
+(`pip install -e .` from `skills/repo-index/scripts/` — see `skills/repo-index/SKILL.md` for
+details).
 
 ## Portable Agent Plugin (any compliant client)
 

@@ -15,7 +15,7 @@ The `repo-index` skill indexes Python code structures (methods, constants, varia
 ## Installation
 
 ```bash
-cd <path-to-agentic-skills-plugin-root>
+cd <path-to-agentic-skills-plugin-root>/skills/repo-index/scripts
 pip install -e .
 ```
 
@@ -82,13 +82,15 @@ All indexed data stored in SQLite tables: `methods`, `constants`, `variables`, `
 
 ```
 agentic-skills/                # plugin root
-├── setup.py              # Package configuration
-├── repo_index/
-│   ├── __init__.py       # Package init
-│   ├── cli.py            # CLI entry point
-│   ├── parser.py         # AST-based code parser
-│   └── storage.py        # SQLite storage
-└── skills/repo-index/SKILL.md
+└── skills/repo-index/
+    ├── SKILL.md
+    └── scripts/
+        ├── setup.py           # Package configuration
+        └── repo_index/
+            ├── __init__.py    # Package init
+            ├── cli.py         # CLI entry point
+            ├── parser.py      # AST-based code parser
+            └── storage.py     # SQLite storage
 
 <your-indexed-repo>/
 └── .repo-index/          # Created when indexing a repo

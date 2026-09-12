@@ -33,10 +33,10 @@ package format, not a universal install command). Once loaded, a
 spec-compliant client should expose all eight skills listed above.
 
 The `repo-index` skill additionally requires the `repo_index` Python
-package bundled at the repo root:
+package bundled alongside it:
 
 ```bash
-cd <path-to-agentic-skills-repo>
+cd <path-to-agentic-skills-repo>/skills/repo-index/scripts
 pip install -e .
 ```
 
