@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "agentic-skills",
+  "version": "1.0.0",
+  "description": "Skills for turning raw product ideas into build-ready documentation (PRD + technical design) and for indexing a codebase for fast lookup.",
+  "author": {
+    "name": "kulkarni2u",
+    "url": "https://github.com/kulkarni2u"
+  },
+  "homepage": "https://github.com/kulkarni2u/agentic-skills",
+  "repository": "https://github.com/kulkarni2u/agentic-skills",
+  "keywords": [
+    "skills",
+    "product-requirements",
+    "prd",
+    "technical-design",
+    "code-index"
+  ]
+}
