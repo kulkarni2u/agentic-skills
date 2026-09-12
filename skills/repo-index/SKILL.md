@@ -1,3 +1,9 @@
+---
+name: repo-index
+description: IDE-like code indexer that creates a searchable SQLite index of methods and constants from any repository. Use when asked to index a codebase, or to search for where a method/constant is defined across a large repo without opening an IDE.
+argument-hint: [index|search] [repo-path-or-query]
+---
+
 # repo-index Skill
 
 IDE-like code indexer that creates a searchable SQLite index of methods, constants, and variables from any repository.
@@ -9,7 +15,7 @@ The `repo-index` skill indexes Python code structures (methods, constants, varia
 ## Installation
 
 ```bash
-cd /Users/sweethome/Work/agentic-skills/repo-index
+cd <path-to-agentic-skills-plugin-root>
 pip install -e .
 ```
 
@@ -75,13 +81,16 @@ All indexed data stored in SQLite tables: `methods`, `constants`, `variables`, `
 ## File Structure
 
 ```
-/Users/sweethome/Work/agentic-skills/repo-index/
+agentic-skills/                # plugin root
 ├── setup.py              # Package configuration
 ├── repo_index/
 │   ├── __init__.py       # Package init
 │   ├── cli.py            # CLI entry point
 │   ├── parser.py         # AST-based code parser
 │   └── storage.py        # SQLite storage
+└── skills/repo-index/SKILL.md
+
+<your-indexed-repo>/
 └── .repo-index/          # Created when indexing a repo
     └── index.db          # SQLite database
 ```

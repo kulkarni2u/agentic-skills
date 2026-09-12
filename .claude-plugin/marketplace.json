@@ -1,0 +1,15 @@
+{
+  "name": "agentic-skills",
+  "owner": {
+    "name": "kulkarni2u",
+    "url": "https://github.com/kulkarni2u"
+  },
+  "description": "Marketplace for the agentic-skills plugin: requirements-to-design skill suite plus a repo code indexer.",
+  "plugins": [
+    {
+      "name": "agentic-skills",
+      "source": ".",
+      "description": "Turns product ideas into build-ready documentation, and indexes a codebase for fast lookup."
+    }
+  ]
+}

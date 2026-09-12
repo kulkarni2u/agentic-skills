@@ -1,6 +1,19 @@
 # agentic-skills
 
-A collection of Claude Code skills for turning raw product ideas into build-ready documentation.
+A Claude Code plugin marketplace with skills for turning raw product ideas into
+build-ready documentation, and for indexing a codebase for fast lookup.
+
+## Installation
+
+This repo is both a marketplace and the plugin it hosts. From within Claude Code:
+
+```
+/plugin marketplace add kulkarni2u/agentic-skills
+/plugin install agentic-skills@agentic-skills
+```
+
+Once installed, every skill below is available, namespaced as
+`/agentic-skills:<skill-name>` (e.g. `/agentic-skills:product-blueprint`).
 
 ## Product Blueprint suite
 
@@ -19,27 +32,26 @@ graph LR
 
 | Skill | What it does | Output |
 |---|---|---|
-| **`/product-blueprint`** | Master pipeline: idea/doc in → PRD + technical design out | all of the below |
-| `/requirements-intake` | Ingests requirements from PDF, Word, markdown, text, or a plain prompt; classifies knowns, ambiguities, and gaps | `docs/blueprint/01-intake.md` |
-| `/requirements-clarify` | Interactive brainstorming loop — asks structured clarification questions in rounds until ≥ 90% confidence (scored on an 8-dimension rubric) | `docs/blueprint/02-clarified-requirements.md` |
-| `/tech-stack-advisor` | Recommends a tech stack via interactive questions (team skills, ops appetite, budget), layer by layer with trade-offs | `docs/blueprint/03-tech-stack.md` |
-| `/prd-writer` | Writes a testable, prioritized Product Requirements Document | `docs/blueprint/PRD.md` |
-| `/tech-design` | Writes a Technical Design Document with Mermaid diagrams (architecture, sequences, ER, deployment) and FR/NFR traceability | `docs/blueprint/TECHNICAL-DESIGN.md` |
-| `/scaffold` | Generates a runnable project skeleton from the technical design — structure, tooling, model & API stubs, tests, CI — and verifies it installs, lints, and tests green | project directory |
+| **`/agentic-skills:product-blueprint`** | Master pipeline: idea/doc in → PRD + technical design out | all of the below |
+| `/agentic-skills:requirements-intake` | Ingests requirements from PDF, Word, markdown, text, or a plain prompt; classifies knowns, ambiguities, and gaps | `docs/blueprint/01-intake.md` |
+| `/agentic-skills:requirements-clarify` | Interactive brainstorming loop — asks structured clarification questions in rounds until ≥ 90% confidence (scored on an 8-dimension rubric) | `docs/blueprint/02-clarified-requirements.md` |
+| `/agentic-skills:tech-stack-advisor` | Recommends a tech stack via interactive questions (team skills, ops appetite, budget), layer by layer with trade-offs | `docs/blueprint/03-tech-stack.md` |
+| `/agentic-skills:prd-writer` | Writes a testable, prioritized Product Requirements Document | `docs/blueprint/PRD.md` |
+| `/agentic-skills:tech-design` | Writes a Technical Design Document with Mermaid diagrams (architecture, sequences, ER, deployment) and FR/NFR traceability | `docs/blueprint/TECHNICAL-DESIGN.md` |
+| `/agentic-skills:scaffold` | Generates a runnable project skeleton from the technical design — structure, tooling, model & API stubs, tests, CI — and verifies it installs, lints, and tests green | project directory |
 
 ### Usage
 
 ```
-/product-blueprint requirements.pdf
-/product-blueprint "a mobile app that tracks my houseplants' watering schedules"
-/requirements-clarify docs/spec.md      # just run the clarification loop
-/tech-stack-advisor                     # just get stack advice
-/scaffold docs/blueprint/TECHNICAL-DESIGN.md ./my-app   # just scaffold the project
+/agentic-skills:product-blueprint requirements.pdf
+/agentic-skills:product-blueprint "a mobile app that tracks my houseplants' watering schedules"
+/agentic-skills:requirements-clarify docs/spec.md      # just run the clarification loop
+/agentic-skills:tech-stack-advisor                     # just get stack advice
+/agentic-skills:scaffold docs/blueprint/TECHNICAL-DESIGN.md ./my-app   # just scaffold the project
 ```
 
-### Installation
+## repo-index skill
 
-- **This repo**: skills live in `.claude/skills/` and load automatically when you open the
-  repo in Claude Code.
-- **Any project**: copy the skill folders into that project's `.claude/skills/`.
-- **Globally**: copy them into `~/.claude/skills/` to use in every project.
+`/agentic-skills:repo-index` indexes a repository's methods and constants into a searchable
+SQLite database, similar to IDE indexing. Requires the bundled `repo_index` Python package
+(`pip install -e .` from this plugin's root — see `skills/repo-index/SKILL.md` for details).
