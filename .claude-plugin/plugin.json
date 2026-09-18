@@ -1,6 +1,6 @@
 {
   "name": "agentic-skills",
-  "description": "Skills for turning raw product ideas into build-ready documentation (PRD + technical design) and for indexing a codebase for fast lookup.",
+  "description": "Skills for product design, language-agnostic code review, and repository indexing.",
   "version": "1.0.0",
   "author": {
     "name": "kulkarni2u"

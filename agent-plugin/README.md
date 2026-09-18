@@ -9,7 +9,7 @@ host that implements the spec), not just Claude Code.
 For Claude Code specifically, prefer the repo root instead: it's a native
 Claude Code plugin (installable via `/plugin install`, manifest at
 [`../.claude-plugin/plugin.json`](../.claude-plugin/plugin.json)). Both
-packages expose the same eight skills; install whichever matches your
+packages expose the same nine skills; install whichever matches your
 client, or both.
 
 ## What's in here
@@ -19,7 +19,7 @@ client, or both.
 - `skills/` — symlinks into the repo's [`../skills`](../skills) directory,
   one per skill (`product-blueprint`, `requirements-intake`,
   `requirements-clarify`, `tech-stack-advisor`, `prd-writer`, `tech-design`,
-  `scaffold`, `repo-index`). There is one source of truth for skill content;
+  `scaffold`, `repo-index`, `code-review`). There is one source of truth for skill content;
   this package doesn't fork it.
 
 There is no `mcp.json` here — every skill is pure instructions/prompting,
@@ -30,7 +30,7 @@ none register an MCP server.
 Install `agent-plugin/` with whatever mechanism your client uses to load an
 Agent Plugin directory (consult your client's docs — the spec defines the
 package format, not a universal install command). Once loaded, a
-spec-compliant client should expose all eight skills listed above.
+spec-compliant client should expose all nine skills listed above.
 
 The `repo-index` skill additionally requires the `repo_index` Python
 package bundled alongside it:
@@ -45,7 +45,7 @@ repo-index install-hooks /path/to/your-repo   # auto re-index on checkout/commit
 
 Read this before assuming the package is more turnkey than it is:
 
-- **Most skill bodies assume Claude Code's own tools.** Six of the eight
+- **Most skill bodies assume Claude Code's own tools.** Six of the nine
   SKILL.md files (`product-blueprint`, `requirements-intake`,
   `requirements-clarify`, `tech-stack-advisor`, `tech-design`, `scaffold`)
   reference Claude Code mechanisms by name — `AskUserQuestion` for

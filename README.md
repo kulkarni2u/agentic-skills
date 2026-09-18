@@ -1,7 +1,7 @@
 # agentic-skills
 
-A Claude Code plugin marketplace with skills for turning raw product ideas into
-build-ready documentation, and for indexing a codebase for fast lookup.
+A Claude Code plugin marketplace with skills for product design, code review,
+and repository indexing.
 
 ## Installation
 
@@ -62,9 +62,22 @@ background after every checkout, commit, merge/pull, rebase, and push — the ot
 below use it to look up existing code instead of grepping by hand, and a stale index would
 silently give them wrong answers.
 
+## code-review skill
+
+`/agentic-skills:code-review` performs language-agnostic patch review through a
+Jev-style decision layer: bounded triage, classification, severity scoring, and
+deterministic policy gating. Its dependency-free Python utility slices unified
+diffs and validates provider-neutral decision JSON without posting comments or
+failing CI unless explicitly requested.
+
+```bash
+python3 skills/code-review/scripts/code_review.py slice change.diff
+python3 skills/code-review/scripts/code_review.py gate decisions.json
+```
+
 ## Portable Agent Plugin (any compliant client)
 
-Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same eight skills to the
+Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same nine skills to the
 vendor-neutral [Agent Plugins 1.0.0](https://agent-plugins.org) standard (`plugin.json` +
 `skills/`) instead of a client-specific format. See
 [`agent-plugin/README.md`](agent-plugin/README.md) for setup and a list of known gaps.
