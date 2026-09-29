@@ -11,7 +11,8 @@ each unit of work. Small vertical slices, proven by tests, traced back to FR IDs
 
 ## Inputs
 
-Prefer `docs/blueprint/PRD.md`, `TECHNICAL-DESIGN.md`, and `03-tech-stack.md`; the
+Prefer `docs/blueprint/PRD.md`, `docs/blueprint/TECHNICAL-DESIGN.md`, and
+`docs/blueprint/03-tech-stack.md`; the
 argument selects the scope (FR IDs, a P0 slice, a story, a spec file, or free text).
 No argument but a scaffold README checklist exists: take the first P0 items. If the
 requirement has no acceptance criteria, derive them and mark each *(assumption)*; if the
