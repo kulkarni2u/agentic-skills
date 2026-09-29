@@ -4,12 +4,12 @@
     "name": "kulkarni2u",
     "url": "https://github.com/kulkarni2u"
   },
-  "description": "Marketplace for product-design, code-review, and repository-indexing skills.",
+  "description": "Marketplace for product-design, implementation, review, and repository-indexing skills.",
   "plugins": [
     {
       "name": "agentic-skills",
       "source": ".",
-      "description": "Supports product design, language-agnostic code review, and repository indexing."
+      "description": "Supports product design, test-first implementation, functional and code review, and repository indexing."
     }
   ]
 }

@@ -1,7 +1,7 @@
 # agentic-skills
 
-A Claude Code plugin marketplace with skills for product design, code review,
-and repository indexing.
+A Claude Code plugin marketplace with skills for product design, implementation,
+code and functional review, and repository indexing.
 
 ## Installation
 
@@ -17,7 +17,7 @@ Once installed, every skill below is available, namespaced as
 
 ## Product Blueprint suite
 
-One master skill orchestrates six sub-skills. Every sub-skill is also independently
+One master skill orchestrates eight sub-skills. Every sub-skill is also independently
 user-invocable — run just the piece you need.
 
 ```mermaid
@@ -28,6 +28,10 @@ graph LR
     D --> E[/prd-writer/]
     E --> F[/tech-design/]
     F -. optional .-> G[/scaffold/]
+    F -. optional .-> H[/implement/]
+    G -.-> H
+    H --> I[/review/]
+    I -. request changes .-> H
 ```
 
 | Skill | What it does | Output |
@@ -39,6 +43,8 @@ graph LR
 | `/agentic-skills:prd-writer` | Writes a testable, prioritized Product Requirements Document | `docs/blueprint/PRD.md` |
 | `/agentic-skills:tech-design` | Writes a Technical Design Document with Mermaid diagrams (architecture, sequences, ER, deployment) and FR/NFR traceability | `docs/blueprint/TECHNICAL-DESIGN.md` |
 | `/agentic-skills:scaffold` | Generates a runnable project skeleton from the technical design — structure, tooling, model & API stubs, tests, CI — and verifies it installs, lints, and tests green | project directory |
+| `/agentic-skills:implement` | Implements FRs / stories / specs test-first, choosing **TDD**, **BDD**, or **DDD** per requirement from a signal rubric (or the approach you name) | code + tests, `docs/blueprint/IMPLEMENTATION-LOG.md` |
+| `/agentic-skills:review` | Functional review (requirement-by-requirement verification matrix against the PRD, with observed test runs) plus code review (delegates to `code-review`), ending in an Approve / Request changes verdict | `docs/blueprint/REVIEW.md` |
 
 ### Usage
 
@@ -48,6 +54,9 @@ graph LR
 /agentic-skills:requirements-clarify docs/spec.md      # just run the clarification loop
 /agentic-skills:tech-stack-advisor                     # just get stack advice
 /agentic-skills:scaffold docs/blueprint/TECHNICAL-DESIGN.md ./my-app   # just scaffold the project
+/agentic-skills:implement FR-3 FR-4                    # implement specific requirements (approach auto-chosen)
+/agentic-skills:implement "BDD: password reset flow"   # force an approach
+/agentic-skills:review main...HEAD                     # functional + code review of a branch
 ```
 
 ## repo-index skill
@@ -77,7 +86,7 @@ python3 skills/code-review/scripts/code_review.py gate decisions.json
 
 ## Portable Agent Plugin (any compliant client)
 
-Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same nine skills to the
+Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same eleven skills to the
 vendor-neutral [Agent Plugins 1.0.0](https://agent-plugins.org) standard (`plugin.json` +
 `skills/`) instead of a client-specific format. See
 [`agent-plugin/README.md`](agent-plugin/README.md) for setup and a list of known gaps.
