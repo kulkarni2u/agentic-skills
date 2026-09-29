@@ -60,6 +60,8 @@ Then a short **test-quality pass**, matched to the approach in the log:
 - **BDD**: scenarios map 1:1 to acceptance criteria and read as behavior, not implementation.
 - **DDD**: invariants are enforced inside aggregates/entities, not scattered in services or handlers.
 
+Also check the change against `implement`'s *Coding standards* (repo rules first, then the
+technical design, then its defaults); report only violations with a concrete failure mode.
 Skip style nits. Every finding states a concrete failure scenario ("input X causes Y, so Z").
 
 ## Verdict
