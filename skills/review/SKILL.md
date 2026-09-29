@@ -100,6 +100,14 @@ Read-only by default: no edits to the user's tree (mutation checks run in a scra
 or external posting unless the user explicitly asks. Offer both after reporting.
 Do not restate findings you could not reproduce or reason to a failure scenario.
 
+## Refresh the index
+
+When the review is complete, re-run `repo-index index <repo-root>` in the foreground so the
+index reflects the reviewed head — do it again after any fix round through `implement`, and
+after checking out a PR or branch to review it. Writing `.repo-index/` is tooling state, not a
+code edit, so it's allowed under the read-only rule. Skip (and say so) if the repo has no
+`.py` files.
+
 ## After reviewing
 
 Standalone: ask (AskUserQuestion) whether to post the findings to the PR, hand the Not met rows and

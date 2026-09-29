@@ -59,6 +59,10 @@ the artifacts produced by earlier phases.
    ask whether to implement the P0 requirements now. If yes, run `implement`, then always
    run `review` on the result. If the review verdict is *Request changes*, offer one
    `implement` → `review` fix round per request; never loop without the user's say-so.
+10. **Re-index after code changes.** Whenever Phase 7 or 8 finishes — code ready or committed,
+    review done, or a fix round applied — make sure `repo-index` was re-run on the project
+    (both sub-skills do this; run `repo-index index` yourself if one was cut short), so later
+    lookups never see a stale index.
 
 ## Final deliverable
 

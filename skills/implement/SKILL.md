@@ -96,9 +96,19 @@ Write or update `docs/blueprint/IMPLEMENTATION-LOG.md`:
 Status is `done`, `partial`, or `blocked`. Record every *(assumption)* and any derived
 acceptance criteria. If the scaffold README has a P0 checklist, tick the items completed.
 
+## Refresh the index
+
+Once the code is ready — last slice green, whether or not it has been committed — re-run
+`repo-index index <repo-root>` in the foreground and confirm it finished. The auto-index git
+hooks only fire on git operations and run in the background, so they miss uncommitted work
+and may not have finished when `review` starts looking things up. If the hooks aren't
+installed yet, run `repo-index install-hooks <repo-root>` too. repo-index scans only `.py`
+files; for a repo with none, skip this step and say so in the report.
+
 ## Report
 
 Tell the user: FRs completed and their status, approach per FR with the one-line why,
-test counts and results actually observed (pass/fail/skipped, lint/typecheck), and open
+test counts and results actually observed (pass/fail/skipped, lint/typecheck), whether the
+index was refreshed, and open
 issues or assumptions needing a decision. Standalone: offer the `review` skill next. In the
 pipeline: return control to `product-blueprint` for the closing summary.

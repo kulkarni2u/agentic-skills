@@ -69,7 +69,8 @@ details).
 Run `repo-index install-hooks /path/to/your-repo` once and the index rebuilds itself in the
 background after every checkout, commit, merge/pull, rebase, and push — the other skills
 below use it to look up existing code instead of grepping by hand, and a stale index would
-silently give them wrong answers.
+silently give them wrong answers. `implement` and `review` also re-run the index themselves
+when they finish, since the hooks don't see uncommitted code.
 
 ## code-review skill
 
