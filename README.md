@@ -59,6 +59,27 @@ graph LR
 /agentic-skills:review main...HEAD                     # functional + code review of a branch
 ```
 
+### Deterministic helpers
+
+`implement` and `review` push everything that doesn't need judgment into dependency-free
+Python scripts (stdlib only, JSON out), so the skill text stays short and the mechanics are
+tested rather than re-derived each run:
+
+```bash
+python3 skills/implement/scripts/implement.py requirements --must    # FR/NFR rows + acceptance criteria from the PRD
+python3 skills/implement/scripts/implement.py approach --id FR-2     # TDD/BDD/DDD signal scoring
+python3 skills/implement/scripts/implement.py detect                 # repo rules + test/lint/typecheck commands
+python3 skills/implement/scripts/implement.py check                  # run them, observed results
+python3 skills/implement/scripts/implement.py log set FR-2 --status done ...   # traceability log + README tick
+python3 skills/review/scripts/review.py scope main...HEAD > scope.json        # diff, claimed FRs, stubs, untraced files
+python3 skills/review/scripts/review.py matrix --scope scope.json             # verification-matrix skeleton
+python3 skills/review/scripts/review.py render bundle.json --date 2026-10-01  # computed verdict + REVIEW.md
+```
+
+`review.py` imports the implement helper and calls `code-review`'s script, so install the
+three skills together. Coding standards shared by both live in
+`skills/implement/references/coding-standards.md`.
+
 ## repo-index skill
 
 `/agentic-skills:repo-index` indexes a repository's methods and constants into a searchable

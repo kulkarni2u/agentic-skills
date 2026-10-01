@@ -6,112 +6,68 @@ argument-hint: [PR number | branch | commit-range | path] [requirements-source]
 
 # Review
 
-Judge whether the change does what was asked and whether it is safe to merge. Orchestrates
-`code-review` for diff-level defects; this skill adds the requirements lens. Evidence over
-opinion.
+Judge whether the change does what was asked and is safe to merge. Scripts do the bookkeeping
+(scope, matrix skeleton, verdict rules, report); you supply evidence and judgment.
 
-## Scope & sources
-
-1. **Change set**: first argument — PR number (`gh pr diff`), branch or range (`git diff <base>...HEAD`,
-   base = default branch merge-base), a path, or the working tree if none. Save it to a scratch
-   `change.diff`; note base, head, and files changed.
-2. **Requirements**, in order of preference: `docs/blueprint/PRD.md` (FR/NFR IDs, acceptance criteria),
-   `docs/blueprint/IMPLEMENTATION-LOG.md` (which FRs are claimed done, with tests and files),
-   `docs/blueprint/TECHNICAL-DESIGN.md` (design contract), the PR description, or a spec the user gave.
-   Review the FRs the change *claims*; list the rest as out of scope, not failed.
-3. **No requirement source?** Ask via **AskUserQuestion**: (a) code-only review, (b) point me at
-   requirements, (c) I'll type them now. Never invent acceptance criteria.
-
-## Functional review
-
-Build the matrix, one row per in-scope requirement (split FRs with multiple criteria):
-
-`ID | Acceptance criterion | Evidence | Verdict | Notes`
-
-- **Evidence** is `test_file::test_name`, a code path (`file:line`), or observed output. Verdict is
-  **Met** / **Partially met** / **Not met** / **Not verifiable** (say what is missing to verify).
-- **Run it.** Execute the full test suite, lint, and type check, plus any commands the requirement
-  implies. Record commands and results as *observed*; label everything else *inferred*. If something
-  cannot run (network, credentials, sandbox), say so — never report a green you did not see.
-- **Tests must bite.** For each criterion, find the test that would fail if the behavior broke.
-  Flag tautological assertions, over-mocked collaborators (the mock is the thing under test),
-  missing negative cases, and criteria with no test. When cheap, prove it with a mutation check
-  (break the behavior, run the test, expect red) — only in a scratch `git worktree`, never the
-  user's working tree.
-- **Edge cases & error paths** named in the PRD (empty, duplicate, unauthorized, over-limit,
-  malformed) each need a row or a note.
-- **Stubs**: grep changed files for `TODO`, `FIXME`, `NotImplemented`, `501`, `pass`-only bodies,
-  skipped/xfail tests. Any hit under an FR marked done in the log is **Not met**.
-- **NFRs**: check measurable ones (latency, limits, coverage, security headers) with a real
-  measurement; otherwise **Not verifiable** plus what it would take (load test, staging).
-- **Scope creep**: behavior, endpoints, or schema in the diff traceable to no requirement.
-- **Design drift**: compare API shapes, data model, component boundaries, and the security model
-  with `TECHNICAL-DESIGN.md`; each deviation is a finding (undocumented drift) or a design-doc update.
-- **Exercise the app** for user-facing FRs when feasible: use the `run` skill (or start the server /
-  CLI), walk the primary flow and one failure path, and record what you saw.
-
-## Code review
-
-Invoke the `code-review` skill on the same diff — `slice` → your decisions → `gate` (see its
-`SKILL.md`; do not reimplement it) — then merge its blockers/warnings/info into this report.
-Then a short **test-quality pass**, matched to the approach in the log:
-
-- **TDD**: unit tests cover branches and error paths of new logic, not just the happy path.
-- **BDD**: scenarios map 1:1 to acceptance criteria and read as behavior, not implementation.
-- **DDD**: invariants are enforced inside aggregates/entities, not scattered in services or handlers.
-
-Also check the change against `implement`'s *Coding standards* (repo rules first, then the
-technical design, then its defaults); report only violations with a concrete failure mode.
-Skip style nits. Every finding states a concrete failure scenario ("input X causes Y, so Z").
-
-## Verdict
-
-- **Request changes** — any *Must* requirement **Not met**, or any code-review blocker.
-- **Approve with follow-ups** — no blockers, but warnings, Partially met Should/Could items, or
-  Not verifiable items that need a tracked follow-up.
-- **Approve** — all in-scope requirements Met (or Not verifiable only for stated, low-risk reasons)
-  and no blockers or warnings.
-
-## Output
-
-Write `docs/blueprint/REVIEW.md` (or the path the user gives):
-
-```markdown
-# Review: <change / PR title>
-| Verdict | <verdict> | Base..Head | <refs> | Date | <date> | Requirements | <sources> |
-
-## 1. Summary
-Three to five lines: what the change does, the verdict, and the reasons that decided it.
-
-## 2. Verification matrix
-## 3. Code findings
-Blockers → warnings → info, each `file:line — title`, failure scenario, remediation.
-## 4. Test quality
-## 5. Scope creep & design drift
-## 6. Not verified
-What was not checked and why; commands that could not run.
-## 7. Commands run
-Command → observed result.
+```
+REV="python3 <this-skill-dir>/scripts/review.py"
+IMPL="python3 <this-skill-dir>/../implement/scripts/implement.py"
+CR="python3 <this-skill-dir>/../code-review/scripts/code_review.py"
 ```
 
-Then give a short chat summary: verdict, matrix counts by verdict, blocker count, top 3 issues.
+Work in a scratch directory for `change.diff`, `scope.json`, `decisions.json`, and `bundle.json`.
 
-## Guardrails
+## 1. Scope
 
-Read-only by default: no edits to the user's tree (mutation checks run in a scratch worktree), no PR comments, approvals,
-or external posting unless the user explicitly asks. Offer both after reporting.
-Do not restate findings you could not reproduce or reason to a failure scenario.
+`$REV scope [range | branch | commit] [--base B] --out change.diff > scope.json` (no target = working
+tree). For a PR, fetch its diff and pass `--diff pr.diff`. The JSON lists changed files, FRs claimed
+in `IMPLEMENTATION-LOG.md`, stubs on added lines, and `untraced` code files (scope-creep candidates).
 
-## Refresh the index
+No PRD, log, or user spec? Ask via **AskUserQuestion**: code-only review, point to requirements, or
+type them now. Never invent acceptance criteria.
 
-When the review is complete, re-run `repo-index index <repo-root>` in the foreground so the
-index reflects the reviewed head — do it again after any fix round through `implement`, and
-after checking out a PR or branch to review it. Writing `.repo-index/` is tooling state, not a
-code edit, so it's allowed under the read-only rule. Skip (and say so) if the repo has no
-`.py` files.
+## 2. Functional review
 
-## After reviewing
+1. `$REV matrix --scope scope.json [--ids …] > matrix.json` — one row per acceptance criterion for
+   the claimed FRs (others land in `out_of_scope`, not failed). Stubbed "done" FRs come pre-failed.
+2. `$IMPL check > checks.json` — the observed test/lint/typecheck results. Never claim a green you
+   didn't see; anything that can't run goes in `not_verified` with the reason.
+3. Fill every `verdict` (Met / Partially met / Not met / Not verifiable) and `evidence`
+   (`file::test`, `file:line`, or observed output). For each row:
+   - Find the test that would fail if the behavior broke; flag tautologies, mocks of the thing
+     under test, and missing negative cases. When cheap, prove it with a mutation check in a
+     scratch `git worktree`, never the user's tree.
+   - Cover PRD edge cases and error paths; measure NFRs or mark Not verifiable with what it'd take.
+   - Exercise user-facing flows (the `run` skill, or start the app) — primary path plus one failure.
+4. Judge each `untraced` file: scope creep, or legitimate support code. Compare API shapes, data
+   model, boundaries, and security model with `TECHNICAL-DESIGN.md`; record deviations in `drift`.
 
-Standalone: ask (AskUserQuestion) whether to post the findings to the PR, hand the Not met rows and
-blockers to `implement` to fix, or stop. In the pipeline: return control to `product-blueprint`
-for the closing summary.
+## 3. Code review
+
+Run the `code-review` skill on `change.diff`: `$CR slice change.diff`, write `decisions.json` per
+its contract, `$CR gate decisions.json > gate.json`. Add a test-quality pass matched to the logged
+approach (TDD: branches and error paths covered; BDD: scenarios map 1:1 to criteria; DDD: invariants
+enforced inside aggregates) and check against
+[../implement/references/coding-standards.md](../implement/references/coding-standards.md) (repo
+rules first). Report only issues with a concrete failure scenario; skip style nits.
+
+## 4. Verdict and report
+
+Assemble `bundle.json`: `title`, `base`, `head`, `requirements_sources`, `summary` (3–5 lines),
+`matrix` (filled rows), `gate`, `checks`, `test_quality`, `drift`, `not_verified` (string lists), and
+any extra `commands` (`{command, result}`). Then:
+
+`$REV render bundle.json --date <today> [--out docs/blueprint/REVIEW.md]`
+
+The verdict is computed, not chosen: **Request changes** if any Must row is Not met, any code-review
+blocker, or any failed check; **Approve with follow-ups** for warnings, Partially met / Not
+verifiable rows, non-Must misses, or drift; otherwise **Approve**. `$REV verdict bundle.json` shows
+it without writing. Give the user the verdict, matrix counts, blocker count, and top 3 issues.
+
+## 5. Finish
+
+- Read-only: no edits to the user's tree, PR comments, or approvals unless asked.
+- Run `$IMPL reindex` when done, again after any fix round or PR checkout (writing `.repo-index/`
+  is tooling state, not a code edit).
+- Standalone: ask (AskUserQuestion) whether to post findings to the PR, hand Not met rows and
+  blockers to `implement`, or stop. In the pipeline: return control to `product-blueprint`.
