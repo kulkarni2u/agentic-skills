@@ -1,6 +1,6 @@
 ---
 name: product-blueprint
-description: Master skill that turns any requirements input (PDF, Word doc, markdown file, or a plain prompt) into a complete product blueprint. It orchestrates requirements intake, an interactive clarification loop until at least 90% confidence, interactive tech-stack selection, PRD generation, and technical design documentation with diagrams. Use when the user says things like "I want to build X", "here are my requirements", "turn this doc into a PRD", or "help me design this product".
+description: Master skill that turns any requirements input (PDF, Word doc, markdown file, or a plain prompt) into a complete product blueprint. It orchestrates requirements intake, an interactive clarification loop until at least 90% confidence, interactive tech-stack selection, PRD generation, technical design documentation with diagrams, and optionally scaffolding, test-first implementation, and functional + code review. Use when the user says things like "I want to build X", "here are my requirements", "turn this doc into a PRD", or "help me design this product".
 argument-hint: [path-to-requirements-file-or-free-text-idea]
 ---
 
@@ -25,6 +25,8 @@ the artifacts produced by earlier phases.
 | 4. PRD | `prd-writer` | `docs/blueprint/PRD.md` |
 | 5. Technical design | `tech-design` | `docs/blueprint/TECHNICAL-DESIGN.md` |
 | 6. Scaffold (optional) | `scaffold` | runnable project skeleton |
+| 7. Implement (optional) | `implement` | code + tests, `docs/blueprint/IMPLEMENTATION-LOG.md` |
+| 8. Review (after 7) | `review` | `docs/blueprint/REVIEW.md` |
 
 ## Orchestration rules
 
@@ -51,14 +53,24 @@ the artifacts produced by earlier phases.
    core deliverable; code generation is a bonus step.
 8. **Brownfield awareness.** If this run is adding to an existing codebase rather than
    starting from scratch, mention that to whichever sub-skill is running — each of Phases
-   1, 3, 4, and 5 knows to consult `repo-index` for what's already implemented instead of
+   1, 3, 4, 5, and 7 knows to consult `repo-index` for what's already implemented instead of
    treating everything as new.
+9. **Phases 7–8 are opt-in and paired.** After Phase 6 (or Phase 5 on an existing codebase),
+   ask whether to implement the P0 requirements now. If yes, run `implement`, then always
+   run `review` on the result. If the review verdict is *Request changes*, offer one
+   `implement` → `review` fix round per request; never loop without the user's say-so.
+10. **Re-index after code changes.** Whenever Phase 7 or 8 finishes — code ready or committed,
+    review done, or a fix round applied — make sure `repo-index` was re-run on the project
+    (both sub-skills do this; run `repo-index index` yourself if one was cut short), so later
+    lookups never see a stale index.
 
 ## Final deliverable
 
 When the pipeline completes, present the user a short closing summary:
 
 - One-paragraph product description in plain language.
-- Links (file paths) to all artifacts (and the scaffolded project directory if Phase 6 ran).
+- Links (file paths) to all artifacts (and the scaffolded project directory if Phase 6 ran,
+  plus the implementation log and review verdict if Phases 7–8 ran).
 - The 3 highest-risk open assumptions carried into the design.
-- Suggested next step (scaffold if skipped, or start implementing the first P0 requirements).
+- Suggested next step (scaffold if skipped, `implement` the first P0 requirements, or address
+  the review's open findings).
