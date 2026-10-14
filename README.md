@@ -106,9 +106,41 @@ python3 skills/code-review/scripts/code_review.py slice change.diff
 python3 skills/code-review/scripts/code_review.py gate decisions.json
 ```
 
+## devils-advocate skill
+
+`/agentic-skills:devils-advocate` stress-tests a proposed design, stack choice, plan,
+requirements set, or decision, whether another skill, another LLM, or you wrote it. It pulls out
+the proposal's decisions and assumptions and writes the strongest case for it first. Then it
+asks pointed questions tied to specific decisions across up to 19 lenses: failure modes,
+security, scale, data integrity, cost, reversibility, alternatives, hidden assumptions, and
+more. Every challenge ends one of four ways: refuted with evidence, mitigated by a change to the
+design, accepted with your sign-off, or put to you as a question. It then attacks the revised
+proposal again, until a round turns up no new critical or high issue. The output is the hardened
+proposal, a risk register, and tripwires: signals that show a risk is coming true, and what to
+do then.
+
+Claude also runs it unprompted before handing over a non-trivial or hard-to-reverse design or
+decision as final.
+
+```
+/agentic-skills:devils-advocate docs/blueprint/TECHNICAL-DESIGN.md
+/agentic-skills:devils-advocate "Move auth to a third-party IdP and drop our user table"
+/agentic-skills:devils-advocate                 # challenge the latest proposal in this conversation
+```
+
+A stdlib script handles the record keeping, so the exit rules are tested rather than
+re-judged on every run:
+
+```bash
+python3 skills/devils-advocate/scripts/devils_advocate.py lenses --kind design
+python3 skills/devils-advocate/scripts/devils_advocate.py init --subject "Auth" --kind decision > ledger.json
+python3 skills/devils-advocate/scripts/devils_advocate.py gate ledger.json     # exits 1 while blockers remain
+python3 skills/devils-advocate/scripts/devils_advocate.py render ledger.json --out docs/devils-advocate/auth.md
+```
+
 ## Portable Agent Plugin (any compliant client)
 
-Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same eleven skills to the
+Not on Claude Code? [`agent-plugin/`](agent-plugin/) packages these same twelve skills to the
 vendor-neutral [Agent Plugins 1.0.0](https://agent-plugins.org) standard (`plugin.json` +
 `skills/`) instead of a client-specific format. See
 [`agent-plugin/README.md`](agent-plugin/README.md) for setup and a list of known gaps.
