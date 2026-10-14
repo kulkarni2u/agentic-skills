@@ -17,7 +17,7 @@ Once installed, every skill below is available, namespaced as
 
 ## Product Blueprint suite
 
-One master skill orchestrates eight sub-skills. Every sub-skill is also independently
+One master skill orchestrates nine sub-skills. Every sub-skill is also independently
 user-invocable — run just the piece you need.
 
 ```mermaid
@@ -25,10 +25,12 @@ graph LR
     A[/product-blueprint/] --> B[/requirements-intake/]
     B --> C[/requirements-clarify/]
     C --> D[/tech-stack-advisor/]
-    D --> E[/prd-writer/]
+    D --> DA1[/devils-advocate/]
+    DA1 --> E[/prd-writer/]
     E --> F[/tech-design/]
-    F -. optional .-> G[/scaffold/]
-    F -. optional .-> H[/implement/]
+    F --> DA2[/devils-advocate/]
+    DA2 -. optional .-> G[/scaffold/]
+    DA2 -. optional .-> H[/implement/]
     G -.-> H
     H --> I[/review/]
     I -. request changes .-> H
@@ -40,6 +42,7 @@ graph LR
 | `/agentic-skills:requirements-intake` | Ingests requirements from PDF, Word, markdown, text, or a plain prompt; classifies knowns, ambiguities, and gaps | `docs/blueprint/01-intake.md` |
 | `/agentic-skills:requirements-clarify` | Interactive brainstorming loop — asks structured clarification questions in rounds until ≥ 90% confidence (scored on an 8-dimension rubric) | `docs/blueprint/02-clarified-requirements.md` |
 | `/agentic-skills:tech-stack-advisor` | Recommends a tech stack via interactive questions (team skills, ops appetite, budget), layer by layer with trade-offs | `docs/blueprint/03-tech-stack.md` |
+| `/agentic-skills:devils-advocate` | Runs after the stack and after the design: challenges each decision, fixes what it can in place, and gets your sign-off on risks it keeps ([details](#devils-advocate-skill)) | hardened artifact, `docs/blueprint/DEVILS-ADVOCATE-{stack,design}.md` |
 | `/agentic-skills:prd-writer` | Writes a testable, prioritized Product Requirements Document | `docs/blueprint/PRD.md` |
 | `/agentic-skills:tech-design` | Writes a Technical Design Document with Mermaid diagrams (architecture, sequences, ER, deployment) and FR/NFR traceability | `docs/blueprint/TECHNICAL-DESIGN.md` |
 | `/agentic-skills:scaffold` | Generates a runnable project skeleton from the technical design — structure, tooling, model & API stubs, tests, CI — and verifies it installs, lints, and tests green | project directory |
@@ -119,7 +122,8 @@ proposal again, until a round turns up no new critical or high issue. The output
 proposal, a risk register, and tripwires: signals that show a risk is coming true, and what to
 do then.
 
-Claude also runs it unprompted before handing over a non-trivial or hard-to-reverse design or
+`product-blueprint` runs it after the tech-stack and technical-design phases. Claude also
+runs it unprompted before handing over a non-trivial or hard-to-reverse design or
 decision as final.
 
 ```

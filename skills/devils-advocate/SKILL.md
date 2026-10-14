@@ -124,9 +124,9 @@ Fix the blockers and run it again. Don't edit the ledger to make the gate pass.
    `TECHNICAL-DESIGN.md`, `03-tech-stack.md`), edit that artifact so each `CH` lands where it
    belongs. If the user wrote it, show the revised version and ask before editing their file.
    A proposal from chat is restated in full, revised.
-2. **Write the report.** `$DA render ledger.json --date <today> --out <path>` with
-   `docs/blueprint/DEVILS-ADVOCATE.md` inside the product-blueprint pipeline, else
-   `docs/devils-advocate/<slug>.md`. For a small chat-only decision, skip the file and put the
+2. **Write the report.** `$DA render ledger.json --date <today> --out <path>`, using the path
+   the calling skill names (product-blueprint uses `docs/blueprint/DEVILS-ADVOCATE-stack.md`
+   and `DEVILS-ADVOCATE-design.md`), else `docs/devils-advocate/<slug>.md`. For a small chat-only decision, skip the file and put the
    verdict, changes, and residual risks in the reply.
 3. **Tell the user**: the verdict, the 3 most serious challenges and how each was settled, what
    changed in the proposal, residual risks with their tripwires, and anything that still needs
