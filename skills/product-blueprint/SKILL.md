@@ -1,6 +1,6 @@
 ---
 name: product-blueprint
-description: Master skill that turns any requirements input (PDF, Word doc, markdown file, or a plain prompt) into a complete product blueprint. It orchestrates requirements intake, an interactive clarification loop until at least 90% confidence, interactive tech-stack selection, PRD generation, technical design documentation with diagrams, and optionally scaffolding, test-first implementation, and functional + code review. Use when the user says things like "I want to build X", "here are my requirements", "turn this doc into a PRD", or "help me design this product".
+description: Master skill that turns any requirements input (PDF, Word doc, markdown file, or a plain prompt) into a complete product blueprint. It orchestrates requirements intake, an interactive clarification loop until at least 90% confidence, interactive tech-stack selection, PRD generation, technical design documentation with diagrams, a devil's-advocate stress test of the stack and the design, and optionally scaffolding, test-first implementation, and functional + code review. Use when the user says things like "I want to build X", "here are my requirements", "turn this doc into a PRD", or "help me design this product".
 argument-hint: [path-to-requirements-file-or-free-text-idea]
 ---
 
@@ -22,8 +22,10 @@ the artifacts produced by earlier phases.
 | 1. Intake | `requirements-intake` | `docs/blueprint/01-intake.md` |
 | 2. Clarify | `requirements-clarify` | `docs/blueprint/02-clarified-requirements.md` |
 | 3. Tech stack | `tech-stack-advisor` | `docs/blueprint/03-tech-stack.md` |
+| 3a. Challenge stack | `devils-advocate` | hardened `03-tech-stack.md`, `docs/blueprint/DEVILS-ADVOCATE-stack.md` |
 | 4. PRD | `prd-writer` | `docs/blueprint/PRD.md` |
 | 5. Technical design | `tech-design` | `docs/blueprint/TECHNICAL-DESIGN.md` |
+| 5a. Challenge design | `devils-advocate` | hardened `TECHNICAL-DESIGN.md`, `docs/blueprint/DEVILS-ADVOCATE-design.md` |
 | 6. Scaffold (optional) | `scaffold` | runnable project skeleton |
 | 7. Implement (optional) | `implement` | code + tests, `docs/blueprint/IMPLEMENTATION-LOG.md` |
 | 8. Review (after 7) | `review` | `docs/blueprint/REVIEW.md` |
@@ -63,6 +65,14 @@ the artifacts produced by earlier phases.
     review done, or a fix round applied — make sure `repo-index` was re-run on the project
     (both sub-skills do this; run `repo-index index` yourself if one was cut short), so later
     lookups never see a stale index.
+11. **Challenge before building on it.** Always run `devils-advocate` right after Phase 3 (kind
+    `decision`, source `03-tech-stack.md`, report `DEVILS-ADVOCATE-stack.md`) and right after
+    Phase 5 (kind `design`, source `TECHNICAL-DESIGN.md`, report `DEVILS-ADVOCATE-design.md`).
+    It edits the artifact in place with its mitigations, so the next phase reads the hardened
+    version. Don't move on while its gate says *Not hardened*: settle the open questions with
+    the user, or record their decision to stop (`convergence_waived_by`). If a 3a mitigation
+    changes the stack, the PRD and design are written against the changed stack. On resume,
+    treat a challenge report older than its artifact as stale and re-run that step.
 
 ## Final deliverable
 
@@ -71,6 +81,7 @@ When the pipeline completes, present the user a short closing summary:
 - One-paragraph product description in plain language.
 - Links (file paths) to all artifacts (and the scaffolded project directory if Phase 6 ran,
   plus the implementation log and review verdict if Phases 7–8 ran).
-- The 3 highest-risk open assumptions carried into the design.
+- The 3 highest-risk open assumptions carried into the design, plus the devil's-advocate
+  verdicts for the stack and the design and any risks the user accepted (with their tripwires).
 - Suggested next step (scaffold if skipped, `implement` the first P0 requirements, or address
   the review's open findings).

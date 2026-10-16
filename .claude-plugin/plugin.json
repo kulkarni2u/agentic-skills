@@ -1,6 +1,6 @@
 {
   "name": "agentic-skills",
-  "description": "Skills for product design, test-first implementation (TDD/BDD/DDD), functional and code review, and repository indexing.",
+  "description": "Skills for product design, test-first implementation (TDD/BDD/DDD), functional and code review, devil's-advocate stress-testing of designs and decisions, and repository indexing.",
   "version": "1.0.0",
   "author": {
     "name": "kulkarni2u"
